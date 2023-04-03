@@ -1,7 +1,7 @@
 %% Plotting the performance
 addpath('/Users/minhnhatle/Dropbox (MIT)/Jazayeri/NoisyMutualInhibition/PlotTools')
 
-load("/Users/minhnhatle/Documents/Sur/MatchingSimulations/processed_data/expdata/122221b_figshare/simdata/EGreedyqlearningAgent-withCorr-doublesigmoid-prob0.00to1.00.mat");
+load("simdata/EGreedyinf-basedAgent-withCorr-doublesigmoid-prob0.00to1.00-092321.mat");
 assert(nblocks == 1000);
 
 produce_heatmap(efflist, prewlst, pswitchlst, 'clim', [0.5,1], 'legendname', 'Efficiency', ...

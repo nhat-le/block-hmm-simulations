@@ -17,7 +17,7 @@ produce_heatmap(-PLoffsetlist, epslst, gammalst, 'clim', [0 10], 'legendname', '
 
 
 %% Plotting the switch slope
-produce_heatmap(PLslopelist, epslst, gammalst, 'clim', [0, 5], 'legendname', 'Slope', ...
+produce_heatmap(PLslopelist, epslst, gammalst, 'clim', [0, 3], 'legendname', 'Slope', ...
 'x_label', '$\epsilon$', 'y_label', '$\gamma$', 'vertline', 0.24, 'horline', 1.22);
 
 %% Plotting the lapse rate (exploration)
