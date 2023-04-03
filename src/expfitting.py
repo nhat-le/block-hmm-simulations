@@ -9,7 +9,10 @@ from src.utils import pathsetup
 
 def fit_animal(animal, params, datarange=-1):
     # Load the behavior
-    filename = f"{params['filepath']}/{params['version']}/{animal}_all_sessions_{params['version']}.mat"
+    if params['version'] is None:
+        filename = f"{params['filepath']}/{animal}_all_sessions.mat"
+    else:
+        filename = f"{params['filepath']}/{params['version']}/{animal}_all_sessions_{params['version']}.mat"
     data = scipy.io.loadmat(filename)
 
     delaystartcands = np.where(data['maxdelays'] > 0)[1]

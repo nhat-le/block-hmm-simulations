@@ -19,9 +19,8 @@ def run_and_save(animal, seed, version, version_save, N_iters=3000, num_states=6
     print(f'Starting run and save for {animal}, seed {seed}')
     # Load data
     paths = pathsetup('matchingsim')
-    filepath = f"{paths['expdatapath']}/{version}/{animal}_all_sessions_{version}.mat"
-    # fitrangefile = f"{paths['expdatapath']}/102121/fitranges_122221.mat"
-    fitrangefile = f"{paths['expdatapath']}/102121/fitranges_022822_wf.mat"
+    filepath = f"/Users/minhnhatle/Documents/block-hmm-simulations/behavior_data/{animal}_all_sessions.mat"
+    fitrangefile = "/Users/minhnhatle/Documents/block-hmm-simulations/behavior_data/fitranges_122221.mat"
     if os.path.exists(fitrangefile):
         datarange = smart.loadmat(fitrangefile)
         fitrange = datarange['ranges'][datarange['animals'] == animal][0]
@@ -86,10 +85,9 @@ def run_animal(animal, seeds, version, N_iters=3000, num_states=6):
     :param seeds: list[int], seed names
     :return: None
     '''
-    paths = pathsetup('matchingsim')
     # Load data
-    filepath = f"{paths['expdatapath']}/{version}/{animal}_all_sessions_{version}.mat"
-    fitrangefile = f"{paths['expdatapath']}/102121/fitranges_022822_wf.mat"
+    filepath = f"/Users/minhnhatle/Documents/block-hmm-simulations/behavior_data/{animal}_all_sessions.mat"
+    fitrangefile = "/Users/minhnhatle/Documents/block-hmm-simulations/behavior_data/fitranges_122221.mat"
 
     if os.path.exists(fitrangefile):
         datarange = smart.loadmat(fitrangefile)
@@ -121,28 +119,18 @@ def run_animal(animal, seeds, version, N_iters=3000, num_states=6):
 
 if __name__ == '__main__':
     seeds = [121, 122, 123, 124, 125]
-    animals = ['f02']
-    # animals = ['e35', 'e46', 'e53', 'e54', 'e56', 'e57', 'f01', 'f02', 'f03', 'f04', 'f11', 'f12',
-    #     'fh01', 'fh02', 'fh03', 'f16', 'f17', 'f20', 'f21', 'f22', 'f23']
-    # animals = ['f23', 'f02']
-    version = '022822_wf'
-    version_save = '022822_wf'
-    # version = '122221b'
-    # version_save = '121821bK3'
+    animals = ['e35', 'e46', 'e53', 'e54', 'e56', 'e57', 'f01', 'f02', 'f03', 'f04', 'f11', 'f12',
+        'fh01', 'fh02', 'fh03', 'f16', 'f17', 'f20', 'f21', 'f22', 'f23']
     paths = pathsetup('matchingsim')
-    files = glob.glob(f"{paths['expdatapath']}/{version}/*_all_sessions_{version}.mat")
     num_states = 6
     N_iters = 3000
-    # animals = ['f01']
-    # animals = [file.split('_')[1].split('/')[-1] for file in files]
-    # animals = ['e35', 'e54', 'e57', 'e56']
-    # animals = ['f32']
+    version = '040223'
+    version_save = '040223'
+
     for animal in animals:
         print(f"Running animal: {animal}")
-        try:
-            bestseed = run_animal(animal, seeds, version, N_iters, num_states)
+        # try:
+        bestseed = run_animal(animal, seeds, version, N_iters, num_states)
+        # Run and save with the best seed
+        run_and_save(animal, bestseed, version, version_save, N_iters, num_states)
 
-            # Run and save with the best seed
-            run_and_save(animal, bestseed, version, version_save, N_iters, num_states)
-        except:
-            continue

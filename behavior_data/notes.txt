@@ -1,0 +1,2 @@
+Notes:
+- This folder contains the _all_sessions_ files for the animals that are included in the paper

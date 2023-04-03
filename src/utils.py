@@ -6,9 +6,9 @@ import ssm
 def pathsetup(project):
     out = {}
     if project == 'matchingsim':
-        out['datapath'] = '/Users/minhnhatle/Dropbox (MIT)/Sur/conferences_and_manuscripts/DynamicForagingPaper/NatureCommunications/Submission 1/code/processed_data/'
-        out['codepath'] = '/Users/minhnhatle/Dropbox (MIT)/Sur/conferences_and_manuscripts/DynamicForagingPaper/NatureCommunications/Submission 1/code/PaperFigures/code/'
-        out['blockhmmsimdata'] ='/Users/minhnhatle/Dropbox (MIT)/Sur/conferences_and_manuscripts/DynamicForagingPaper/NatureCommunications/Submission 1/code/processed_data/simdata/blockhmm'
+        out['datapath'] = '/Users/minhnhatle/Documents/Sur/conferences_and_manuscripts/DynamicForagingPaper/NatureCommunications/Submission 1/code/processed_data/'
+        out['codepath'] = '/Users/minhnhatle/Documents/Sur/conferences_and_manuscripts/DynamicForagingPaper/NatureCommunications/Submission 1/code/PaperFigures/code/'
+        out['blockhmmsimdata'] ='/Users/minhnhatle/Documents/Sur/conferences_and_manuscripts/DynamicForagingPaper/NatureCommunications/Submission 1/code/processed_data/simdata/blockhmm'
 
         out['expdatapath'] = out['datapath']+ 'expdata'
         out['blockhmmfitpath'] = out['datapath']+ 'blockhmmfit'

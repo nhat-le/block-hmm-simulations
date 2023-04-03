@@ -19,4 +19,21 @@ Data for the K-selection will be saved in `blockhmm_synthetic_K_validation.mat`.
 
 * Then run the MATLAB script `blockhmm_synthetic.m` to generate the figures.
 
+## Instructions for data analysis code for the paper
+Code for producing the figures in the paper can be run by calling the scripts `figX.m` in MATLAB. Data required for 
+running the code is available [here](https://doi.org/10.6084/m9.figshare.22493308)
+
+Some jupyter notebooks are provided for data pre-processing:
+
+- `session_average_parameters_per_animal.ipynb` generates the summary parameter fits of session-averaged transition
+functions of animals (Fig. 1)
+  
+- `switching_world_classifier.ipynb` performs the forward simulations that generate results in Fig. 5, S3, S4
+
+- `switching_world_classifier.ipynb` generates the evaluation dataset used to evaluate the classifier performance 
+in Fig. 5f.
+  
+- `src.run_multi_hmm_fits.py` is run to generate the HMM fits for each animal.
+
+
 

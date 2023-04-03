@@ -16,7 +16,10 @@ def run_and_validate(animal, seed, params):
     # version = '_113021'
     # version_save = '_113021'
     version = params['version']
-    filepath = f'/Users/minhnhatle/Dropbox (MIT)/Sur/MatchingSimulations/processed_data/expdata/{version}/{animal}_all_sessions_{version}.mat'
+    if version is None:
+        filepath = f'/Users/minhnhatle/Documents/Sur/MatchingSimulations/processed_data/expdata/122221b_figshare/{animal}_all_sessions.mat'
+    else:
+        filepath = f'/Users/minhnhatle/Documents/Sur/MatchingSimulations/processed_data/expdata/{version}/{animal}_all_sessions_{version}.mat'
     fitrangefile = params['fitrangefile']
     # fitrangefile = '/Users/minhnhatle/Dropbox (MIT)/Sur/MatchingSimulations/processed_data/expdata/102121/fitranges_102121.mat'
     datarange = smart.loadmat(fitrangefile)
