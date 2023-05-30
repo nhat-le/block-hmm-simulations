@@ -160,6 +160,58 @@ mymakeaxis('x_label', 'State i', 'y_label', 'State i+1',...
 colorbar('Position', [0.93,0.38,0.02,0.5], 'FontSize', 12, 'Ticks', 0:0.2:1, 'Limits', 0:1)
 colormap gray
 
+%%
+figure('Position', [405,479,743,319]);
+
+subplot(121)
+imagesc(true_transition_mat)
+hold on
+axis xy
+% colorbar('Position', [0.5,0.38,0.02,0.5], 'FontSize', 12, 'Ticks', 0:0.2:1, 'Limits', 0:1)
+
+% Display numerical values in the squares of true_transition_mat
+for i = 1:3
+    for j = 1:3
+        textHandles = text(j, i, num2str(true_transition_mat(i, j), '%0.2f'), ...
+            'HorizontalAlignment', 'Center', 'VerticalAlignment', 'Middle');
+        if i == j
+            set(textHandles, 'Color', 'k'); 
+        else
+            set(textHandles, 'Color', 'w'); 
+        end
+    end
+end
+
+mymakeaxis('x_label', 'State i', 'y_label', 'State i+1',...
+    'xticks', 1:3, 'yticks', 1:3, 'xytitle', 'True transition matrix')
+
+colorbar('Position', [0.5,0.38,0.02,0.5], 'FontSize', 12, 'Ticks', 0:0.2:1, 'Limits', 0:1)
+
+subplot(122)
+imagesc(learned_transition_mat)
+axis xy
+% colorbar('Position', [0.93,0.38,0.02,0.5], 'FontSize', 12, 'Ticks', 0:0.2:1, 'Limits', 0:1)
+% colormap gray
+
+% Display numerical values in the squares of true_transition_mat
+for i = 1:3
+    for j = 1:3
+        textHandles = text(j, i, num2str(learned_transition_mat(i, j), '%0.2f'), ...
+            'HorizontalAlignment', 'Center', 'VerticalAlignment', 'Middle');
+        if i == j
+            set(textHandles, 'Color', 'k'); 
+        else
+            set(textHandles, 'Color', 'w'); 
+        end
+    end
+end
+
+mymakeaxis('x_label', 'State i', 'y_label', 'State i+1',...
+    'xticks', 1:3, 'yticks', 1:3, 'xytitle', 'Learned transition matrix')
+% colorbar('Position', [0.492897081950026,0.113207542708281,0.022598870056497,0.814016176968269])
+colorbar('Position', [0.93,0.38,0.02,0.5], 'FontSize', 12, 'Ticks', 0:0.2:1, 'Limits', 0:1)
+colormap gray
+
 %% Validation and K-selection
 load('blockhmm_synthetic_K_validation.mat');
 figure;

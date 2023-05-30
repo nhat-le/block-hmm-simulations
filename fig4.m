@@ -172,7 +172,7 @@ mymakeaxis('x_label', 'HMM mode', ...
 
 
 
-%% Fig. S2b
+%% Fig. S2c
 classes_males = hmmidentities(strcmp(sex, 'M'), :);
 classes_females = hmmidentities(strcmp(sex, 'F'), :);
 composition_males = classes_males(:);
@@ -206,7 +206,7 @@ mymakeaxis('y_label', '% modes', 'font_size', 25, ...
 
 
 
-%% Fig. S2a
+%% Fig. S2b
 nmodes_male = nmodes_lst(strcmp(sex, 'M'));
 nmodes_female = nmodes_lst(strcmp(sex, 'F'));
 male_counts = [0 2 2 0 5];

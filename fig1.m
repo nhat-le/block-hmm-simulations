@@ -27,7 +27,7 @@ for i = 1:numel(animals_ids)
     %Trim based on fitparams
     idx = contains(animals, animals_ids{i});
     assert(sum(idx) == 1);
-    fitrange = ranges{idx};
+    fitrange = ranges{idx} + 1;
     
     effs_all{i} = effs(fitrange);
     slopes_all{i} = slopes(fitrange);
@@ -44,6 +44,14 @@ expoffsets_all(expoffsets_all > 20) = filterval;
 
 expslopes_all = pad_to_same_length(slopes_all);
 explapses_all = pad_to_same_length(lapses_all);
+
+%% Find performance on the last session for each animal
+for i = 1:size(expeff_all, 1)
+    perf_array = expeff_all(i,:);
+    perf_array = perf_array(~isnan(perf_array));
+    fprintf("Animal: %s, perf: %.2f\n", animals_ids{i}, mean(perf_array(end-5:end)));
+
+end
 
 
 

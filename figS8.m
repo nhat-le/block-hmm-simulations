@@ -98,35 +98,34 @@ for i = 1:numel(animalModeInfo.K)
         end
     end
     
-    figure;
-    imagesc(transmatPermuted)
-    colormap gray
+%     figure;
+%     imagesc(transmatPermuted)
+%     colormap gray
+% 
+%     
+% 
+%  
+%     caxis([0 1])
+% %     colorbar;
+%     axis xy
+%     mymakeaxis('x_label', 'State i', 'y_label', 'State i + 1', 'xticks', 1:K,...
+%         'xticklabels', labels, 'yticks', 1:K, 'yticklabels', labels, 'xytitle', animal_name);
+% 
+%     % Display numerical values in the squares of true_transition_mat
+%     for i_mat = 1:size(transmatPermuted, 1)
+%         for j_mat = 1:size(transmatPermuted, 1)
+%             textHandles = text(j_mat, i_mat, num2str(transmatPermuted(i_mat, j_mat), '%0.2f'), ...
+%                 'HorizontalAlignment', 'Center', 'VerticalAlignment', 'Middle', 'Color', 'w');
+%             
+% %             set(textHandles, 'Color', 'w'); 
+%             
+%         end
+%     end
 
-    
-
- 
-    caxis([0 1])
-%     colorbar;
-    axis xy
-    mymakeaxis('x_label', 'State i', 'y_label', 'State i + 1', 'xticks', 1:K,...
-        'xticklabels', labels, 'yticks', 1:K, 'yticklabels', labels, 'xytitle', animal_name);
-
-    % Display numerical values in the squares of true_transition_mat
-    for i_mat = 1:size(transmatPermuted, 1)
-        for j_mat = 1:size(transmatPermuted, 1)
-            textHandles = text(j_mat, i_mat, num2str(transmatPermuted(i_mat, j_mat), '%0.2f'), ...
-                'HorizontalAlignment', 'Center', 'VerticalAlignment', 'Middle', 'Color', 'w', ...
-                'FontSize', 16);
-            
-%             set(textHandles, 'Color', 'w'); 
-            
-        end
-    end
-
-    filename = fullfile(sprintf('/Users/minhnhatle/Documents/block-hmm-simulations/figs/animal_transmat/transmat_%s.pdf', animal_name));
-    if ~exist(filename, 'file')
-        saveas(gcf, filename);
-    end
+%     filename = fullfile(sprintf('/Users/minhnhatle/Documents/block-hmm-simulations/figs/animal_transmat/transmat_%s.pdf', animal_name));
+%     if ~exist(filename, 'file')
+%         saveas(gcf, filename);
+%     end
     
     counter = counter + n_zstates;    
     
@@ -160,46 +159,8 @@ for i = 1:6
 end
 
 
-%% Plot identity of HMM modes per animal
-hmmidentities = zeros(numel(animalinfo), 6);
-namelst = {};
-for i = 1:numel(animalinfo)
-    K = animalModeInfo.K(i);
-    assert(numel(animalinfo(i).classes) == K);
-    hmmidentities(i, 1:K) = animalinfo(i).classes;
-    namelst{i} = animalinfo(i).animal;
-end
-
-meanmode = mean(hmmidentities, 2);
-Nmodes = sum(hmmidentities > 0, 2);
-[~,idx] = sort(Nmodes);
-namelst = namelst(idx);
-hmmidentities = hmmidentities(idx,:);
-
-% idx2 = 22 - [1,2,3,4,5,7,9,11,17,19,6,8,12,13,14,15,18,10,16,20,21];
-% idx2 = idx2(end:-1:1);
-% hmmidentities = hmmidentities(idx2,:);
-% namelst = namelst(idx2);
-
-cmap = brewermap(6, 'Set1');
-cmap = cmap([2,1,5,6,4,3],:);
-cmap = [0 0 0; cmap];
-
-figure;
-imagesc(hmmidentities);
-colormap(cmap);
-hold on
-vline((0:6) + 0.5, 'k');
-hline((0:numel(animalinfo)) + 0.5, 'k');
-
-axis xy
-mymakeaxis('x_label', 'HMM mode', 'y_label', 'Animal', ...
-    'font_size', 22, 'xticks', 1:6, 'yticks', 1:numel(namelst), 'yticklabels', namelst)
-
-
-
 %% Plot state evolution profile for each animal
-opts.plotting = 1;
+opts.plotting = 0;
 f = waitbar(0);
 compositions = {};
 Lwindow = 30;
@@ -245,18 +206,6 @@ for id = 1 :numel(animalinfo)
     saveas(gcf, sprintf('figs/single_perf_composition/%s.pdf', animalinfo(id).animal));
 end
 close(f)
-
-
-%% Save if requested
-opts.save = 0;
-savefilename = fullfile(opts.rootdir, sprintf('hmmblock_composition_info_%s_v4_021322.mat', version));
-
-if opts.save && ~exist(savefilename, 'file')
-    save(savefilename, 'opts', 'animalinfo');
-    fprintf('File saved!\n');
-else
-    fprintf('Skipping save...\n');   
-end
 
 
 
@@ -317,5 +266,182 @@ l.Title.String = 'Regime';
 l.Title.FontSize = 12;
 l.FontSize = 12;
 
+%% plot evolution for male vs female
+animal_names_sex = {'e54', 'f11', 'f22', 'f03', 'f20', 'f01', 'e56', 'f12', 'fh03', ...
+    'fh02', 'e57', 'f16', 'fh01', 'e46', 'f04', ...
+    'f02', 'f23', 'e35', 'f21', ...
+    'f17', 'e53'};
 
-%% Plot the evolution of strategies as line plots
+sex = {'F', 'F', 'M', 'F', 'M', 'M', 'M', 'F', 'M', ...
+    'F', 'F', 'F', 'M', 'M', 'F', ...
+    'F', 'M', 'F', 'M', ...
+    'F', 'F'};
+
+extracted_all_male = {};
+extracted_all_female = {};
+for i = 1:numel(animalinfo)
+    name = animalinfo(i).animal;
+    names_id = find(strcmp(animal_names_sex, name));
+    if strcmp(sex{names_id}, 'F')
+        extracted_all_female{end+1} = extracted_all{i};
+    elseif strcmp(sex{names_id}, 'M')
+        extracted_all_male{end+1} = extracted_all{i};
+    else
+        error('unknown value')
+    end
+end
+
+% female plot
+
+figure('Position', [440,379,731,419]);
+hold on
+lines = [];
+for i =1:6
+    sline = pad_to_same_length(extracted_all_female, i);
+    disp(nanmean(sline(:, 30)))
+    N = sum(~isnan(sline));
+    if i == 4
+        h = errorbar(1:size(sline, 2), nanmean(sline, 1), nanstd(sline, [], 1) ./ sqrt(N), ...
+            'o-', 'Color', 'k', 'MarkerFaceColor', colors(i,:), 'MarkerEdgeColor', 'k');
+    else
+        h = errorbar(1:size(sline, 2), nanmean(sline, 1), nanstd(sline, [], 1) ./ sqrt(N), ...
+            'o-', 'Color', colors(i,:), 'MarkerFaceColor', colors(i,:));
+    end
+    lines(i) = h;
+%     xlim([1, 40])
+    ylim([0, 1])
+end
+
+mymakeaxis('x_label', 'Session', 'y_label', 'Fraction', 'xticks', 0:5:Lwindow, 'font_size', 22)
+l = legend(lines, {'Q1', 'Q2', 'Q3', 'Q4', 'IB5', 'IB6'});
+l.Title.String = 'Regime';
+l.Title.FontSize = 12;
+l.FontSize = 12;
+
+%% male plot
+% female plot
+
+figure('Position', [440,379,731,419]);
+hold on
+lines = [];
+for i =1:6
+    sline = pad_to_same_length(extracted_all_male, i);
+    disp(nanmean(sline(:, 30)))
+    N = sum(~isnan(sline));
+    if i == 4
+        h = errorbar(1:size(sline, 2), nanmean(sline, 1), nanstd(sline, [], 1) ./ sqrt(N), ...
+            'o-', 'Color', 'k', 'MarkerFaceColor', colors(i,:), 'MarkerEdgeColor', 'k');
+    else
+        h = errorbar(1:size(sline, 2), nanmean(sline, 1), nanstd(sline, [], 1) ./ sqrt(N), ...
+            'o-', 'Color', colors(i,:), 'MarkerFaceColor', colors(i,:));
+    end
+    lines(i) = h;
+%     xlim([1, 40])
+    ylim([0, 1])
+end
+
+mymakeaxis('x_label', 'Session', 'y_label', 'Fraction', 'xticks', 0:5:Lwindow, 'font_size', 22)
+l = legend(lines, {'Q1', 'Q2', 'Q3', 'Q4', 'IB5', 'IB6'});
+l.Title.String = 'Regime';
+l.Title.FontSize = 12;
+l.FontSize = 12;
+
+
+
+%% summarize and do stats
+p1lst = [];
+p2lst = [];
+p3lst = [];
+diff1lst = [];
+diff2lst = [];
+diff3lst = [];
+
+mean_male = zeros(6, 3);
+mean_female = zeros(6, 3);
+std_male = zeros(6, 3);
+std_female = zeros(6, 3);
+
+
+for mode_id = 1:6
+    male_perf_1 = [];
+    male_perf_2 = [];
+    male_perf_3 = [];
+
+    
+    for mouse_id = 1:numel(extracted_all_male)
+        raw_perf = extracted_all_male{mouse_id}(:, mode_id);
+        padded_perf = nan(1, 30);
+        padded_perf(1:numel(raw_perf)) = raw_perf;
+        male_perf_1(end+1) = nanmean(padded_perf(1:10));
+        male_perf_2(end+1) = nanmean(padded_perf(11:20));
+        male_perf_3(end+1) = nanmean(padded_perf(21:30));
+    end
+
+    female_perf_1 = [];
+    female_perf_2 = [];
+    female_perf_3 = [];
+
+    for mouse_id = 1:numel(extracted_all_female)
+        raw_perf = extracted_all_female{mouse_id}(:, mode_id);
+        padded_perf = nan(1, 30);
+        padded_perf(1:numel(raw_perf)) = raw_perf;
+        female_perf_1(end+1) = nanmean(padded_perf(1:10));
+        female_perf_2(end+1) = nanmean(padded_perf(11:20));
+        female_perf_3(end+1) = nanmean(padded_perf(21:30));
+    end
+    
+    mean_male(mode_id, 1) = nanmean(male_perf_1);
+    mean_male(mode_id, 2) = nanmean(male_perf_2);
+    mean_male(mode_id, 3) = nanmean(male_perf_3);
+
+    mean_female(mode_id, 1) = nanmean(female_perf_1);
+    mean_female(mode_id, 2) = nanmean(female_perf_2);
+    mean_female(mode_id, 3) = nanmean(female_perf_3);
+
+    std_male(mode_id, 1) = nanstd(male_perf_1);
+    std_male(mode_id, 2) = nanstd(male_perf_2);
+    std_male(mode_id, 3) = nanstd(male_perf_3);
+
+    std_female(mode_id, 1) = nanstd(female_perf_1);
+    std_female(mode_id, 2) = nanstd(female_perf_2);
+    std_female(mode_id, 3) = nanstd(female_perf_3);
+
+    p1lst(end+1) = ranksum(male_perf_1(~isnan(male_perf_1)), female_perf_1(~isnan(female_perf_1)));
+    p2lst(end+1) = ranksum(male_perf_2(~isnan(male_perf_2)), female_perf_2(~isnan(female_perf_2)));
+    p3lst(end+1) = ranksum(male_perf_3(~isnan(male_perf_3)), female_perf_3(~isnan(female_perf_3)));
+
+    diff1lst(end+1) = nanmean(male_perf_1) - nanmean(female_perf_1);
+    diff2lst(end+1) = nanmean(male_perf_2) - nanmean(female_perf_2);
+    diff3lst(end+1) = nanmean(male_perf_3) - nanmean(female_perf_3);
+end
+
+
+
+%% Bar plot
+figure('Position', [440,80,493,718]);
+hold on
+gap = 0.1;
+
+for iplot = 1:3
+    subplot(3,1,iplot)
+    h1 = bar((1:6) + gap, mean_male(:, iplot), 0.2, 'k', 'FaceAlpha', 0.6);
+    hold on
+    h2 = bar((1:6) - gap, mean_female(:, iplot), 0.2, 'b', 'FaceAlpha', 0.6);
+    errorbar((1:6) + gap, mean_male(:, iplot), ...
+        std_male(:, iplot), 'o', 'Color', 'k', ...
+        'MarkerFaceColor', 'k', 'MarkerEdgeColor', 'k');
+    errorbar((1:6) - gap, mean_female(:, iplot), ...
+        std_female(:, iplot), 'o', 'Color', 'k', ...
+        'MarkerFaceColor', 'k', 'MarkerEdgeColor', 'k');
+    ylim([0, 1])
+
+    mymakeaxis('xticks', [1,2,3,4,5,6], ...
+        'xticklabels', {'Q1', 'Q2', 'Q3', 'Q4', 'IB5', 'IB6'}, ...
+        'font_size', 20, 'yticks', [0, 0.5, 1])
+%     legend([h1, h2], {'Male', 'Female'})
+end
+
+
+
+
+
